@@ -1,9 +1,11 @@
 package screens
 {
-	import starling.display.Button
+	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	
+	import com.greensock.TweenLite;
 	
 	public class Welcome extends Sprite
 	{
@@ -38,7 +40,8 @@ package screens
 			
 			hero = new Image(Assets.getTexture("WelcomeHero"));
 			this.addChild(hero);
-
+			hero.x = -hero.width;
+			hero.y = 100;
 			
 			playBtn = new Button(Assets.getTexture("WelcomePlayBtn"));
 			playBtn.x = 500;
@@ -57,6 +60,17 @@ package screens
 			hero.x = -hero.width;
 			hero.y = 100;
 			
+			TweenLite.to(hero, 2, {x: 80});
+			
+			this.addEventListener(Event.ENTER_FRAME, heroAnimation);
+		}
+		
+		private function heroAnimation(event:Event):void
+		{
+			var currentDate:Date = new Date();
+			hero.y = 100 + (Math.cos(currentDate.getTime() * 0.002) * 25);
+			playBtn.y = 260 + (Math.cos(currentDate.getTime() * 0.002) * 10);
+			aboutBtn.y = 380 + (Math.cos(currentDate.getTime() * 0.002) * 10);
 		}
 	}
 }
