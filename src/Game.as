@@ -23,8 +23,6 @@ package
 		{
 			trace("starling framework initialized!");
 			
-			this.addEventListener(events.NavigationEvent.CHANGE_SCREEN, onChangeScreen);
-			
 			screenInGame = new InGame();
 			screenInGame.disposeTemporarily();
 			this.addChild(screenInGame);
@@ -32,6 +30,10 @@ package
 			screenWelcome = new Welcome();
 			this.addChild(screenWelcome);
 			screenWelcome.initialize();
+			
+			this.addEventListener(events.NavigationEvent.CHANGE_SCREEN, onChangeScreen);
+			
+			
 		}
 		private function onChangeScreen(event:NavigationEvent):void
 		{
