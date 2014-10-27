@@ -11,16 +11,16 @@ package objects
 		private var bgLayer4:BgLayer;
 		
 		private var _speed:Number = 0;
-		
+
 		public function GameBackground()
 		{
 			super();
-			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
+			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
 		private function onAddedToStage(event:Event):void
 		{
-			this.removeEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
+			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			
 			bgLayer1 = new BgLayer(1);
 			bgLayer1.parallax = 0.02;
@@ -38,32 +38,34 @@ package objects
 			bgLayer4.parallax = 1;
 			this.addChild(bgLayer4);
 			
-			this.addEventListener(Event.ENTER_FRAME,onEnterFrame);
+			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
 		private function onEnterFrame(event:Event):void
 		{
 			bgLayer1.x -= Math.ceil(_speed * bgLayer1.parallax);
-			if(bgLayer1.x < -stage.stageWidth) bgLayer1.x = 0;
+			if (bgLayer1.x < -stage.stageWidth) bgLayer1.x = 0;
 			
 			bgLayer2.x -= Math.ceil(_speed * bgLayer2.parallax);
-			if(bgLayer2.x < -stage.stageWidth) bgLayer2.x = 0;
+			if (bgLayer2.x < -stage.stageWidth) bgLayer2.x = 0;
 			
 			bgLayer3.x -= Math.ceil(_speed * bgLayer3.parallax);
-			if(bgLayer3.x < -stage.stageWidth) bgLayer3.x = 0;
+			if (bgLayer3.x < -stage.stageWidth) bgLayer3.x = 0;
 			
 			bgLayer4.x -= Math.ceil(_speed * bgLayer4.parallax);
-			if(bgLayer4.x < -stage.stageWidth) bgLayer4.x = 0;
+			if (bgLayer4.x < -stage.stageWidth) bgLayer4.x = 0;
+			
 		}
 		
 		public function get speed():Number
 		{
 			return _speed;
 		}
-		
+
 		public function set speed(value:Number):void
 		{
 			_speed = value;
 		}
+
 	}
 }

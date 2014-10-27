@@ -7,7 +7,7 @@ package objects
 	public class BgLayer extends Sprite
 	{
 		private var image1:Image;
-		private var image2:Image
+		private var image2:Image;
 		
 		private var _layer:int;
 		private var _parallax:Number;
@@ -23,8 +23,7 @@ package objects
 		{
 			this.removeEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
 			
-			if (_layer == 1)
-			{
+			if (_layer == 1){
 				image1 = new Image(Assets.getTexture("BgLayer" + _layer));
 				image2 = new Image(Assets.getTexture("BgLayer" + _layer));
 			}
@@ -46,12 +45,13 @@ package objects
 		
 		public function get parallax():Number
 		{
-			return parallax;
+			return _parallax;
 		}
-		
+
 		public function set parallax(value:Number):void
 		{
 			_parallax = value;
 		}
+
 	}
 }
