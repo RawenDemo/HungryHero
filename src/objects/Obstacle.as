@@ -19,15 +19,15 @@ package objects
 		private var obstacleAnimation:MovieClip;
 		private var watchOutAnimation:MovieClip;
 		
+		
 		public function Obstacle(_type:int, _distance:int, _watchOut:Boolean = true, _speed:int = 0)
 		{
 			super();
-			
 			this._type = _type;
 			this._distance = _distance;
-			this._watchOut = _watchOut
+			this._watchOut = _watchOut;
 			this._speed = _speed
-				
+			
 			_alreadyHit = false;
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -37,32 +37,32 @@ package objects
 		{
 			return _speed;
 		}
-
+		
 		public function set speed(value:int):void
 		{
 			_speed = value;
 		}
-
+		
 		public function get distance():int
 		{
 			return _distance;
 		}
-
+		
 		public function set distance(value:int):void
 		{
 			_distance = value;
 		}
-
+		
 		public function get position():String
 		{
 			return _position;
 		}
-
+		
 		public function set position(value:String):void
 		{
 			_position = value;
 		}
-
+		
 		public function get alreadyHit():Boolean
 		{
 			return _alreadyHit;
@@ -79,7 +79,7 @@ package objects
 				else obstacleImage.visible = false;
 			}
 		}
-			
+		
 		public function get watchOut():Boolean
 		{
 			return _watchOut;
@@ -87,7 +87,7 @@ package objects
 		
 		public function set watchOut(value:Boolean):void
 		{
-			watchOut = value;
+			_watchOut = value;
 			
 			if (watchOutAnimation)
 			{
@@ -142,11 +142,14 @@ package objects
 			}
 			else
 			{
+				
+				
+				
 				obstacleImage = new Image(Assets.getAtlas().getTexture("obstacle" + _type));
 				obstacleImage.x = 0;
 				obstacleImage.y = 0;
 				this.addChild(obstacleImage);
-			}
+			}	
 		}
 	}
 }
