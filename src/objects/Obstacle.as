@@ -142,9 +142,6 @@ package objects
 			}
 			else
 			{
-				
-				
-				
 				obstacleImage = new Image(Assets.getAtlas().getTexture("obstacle" + _type));
 				obstacleImage.x = 0;
 				obstacleImage.y = 0;

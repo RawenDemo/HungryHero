@@ -5,6 +5,7 @@ package screens
 	
 	import objects.GameBackground;
 	import objects.Hero;
+	import objects.Item;
 	import objects.Obstacle;
 	
 	import starling.display.Button;
@@ -12,7 +13,6 @@ package screens
 	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
-	
 	import starling.utils.deg2rad;
 	
 	public class InGame extends Sprite
@@ -40,6 +40,7 @@ package screens
 		private var touchY:Number;
 		
 		private var obstaclesToAnimate:Vector.<Obstacle>;
+		private var itemsToAnimate:Vector.<Item>;
 		
 		public function InGame()
 		{
@@ -96,6 +97,7 @@ package screens
 			obstacleGapCount = 0;
 			
 			obstaclesToAnimate = new Vector.<Obstacle>();
+			itemsToAnimate = new Vector.<Item>();
 			
 			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
 		}
@@ -177,11 +179,51 @@ package screens
 					initObstacle();
 					animateObstacles();
 					
+					createFoodItems();
+					animateItems();
+					
 					break;
 				case "over":
 					break;
 			}
 			
+		}
+		
+		private function animateItems():void
+		{
+			var itemToTrack:Item;
+			
+			for(var i:uint = 0; i < itemsToAnimate.length; i++)
+			{
+				itemToTrack = itemsToAnimate[i];
+				
+				itemToTrack.x -= playerSpeed * elapsed;
+				
+				if (itemToTrack.bounds.intersects(hero.bounds))
+				{
+					itemsToAnimate.splice(i, 1);
+					this.removeChild(itemToTrack);
+				}
+				
+				if (itemToTrack.x < -50)
+				{
+					itemsToAnimate.splice(i, 1);
+					this.removeChild(itemToTrack);
+				}
+			}
+		}
+		
+		private function createFoodItems():void
+		{
+			if (Math.random() > 0.95)
+			{
+				var itemToTrack:Item = new Item(Math.ceil(Math.random() * 5));
+				itemToTrack.x = stage.stageWidth + 50;
+				itemToTrack.y = int(Math.random() * (gameArea.bottom - gameArea.top)) + gameArea.top;
+				this.addChild(itemToTrack);
+				
+				itemsToAnimate.push(itemToTrack);
+			}
 		}
 		
 		private function cameraShake():void
