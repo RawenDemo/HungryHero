@@ -20,5 +20,10 @@
 			<type>2</type>
 			<location>C:/Users/johannape/Downloads/greensock-as3/greensock-as3</location>
 		</link>
+		<link>
+			<name>[source path] src</name>
+			<type>2</type>
+			<location>C:/Users/johannape/Downloads/Starling-Extension-Particle-System-master/Starling-Extension-Particle-System-master/src</location>
+		</link>
 	</linkedResources>
 </projectDescription>

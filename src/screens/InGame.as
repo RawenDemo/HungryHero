@@ -7,13 +7,20 @@ package screens
 	import objects.Hero;
 	import objects.Item;
 	import objects.Obstacle;
+	import objects.Particle;
 	
+	import starling.core.Starling;
 	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
+	import starling.extensions.PDParticleSystem;
+	import starling.text.TextField;
+	import starling.utils.HAlign;
+	import starling.utils.VAlign;
 	import starling.utils.deg2rad;
+	import starling.textures.Texture;
 	
 	public class InGame extends Sprite
 	{
@@ -41,6 +48,11 @@ package screens
 		
 		private var obstaclesToAnimate:Vector.<Obstacle>;
 		private var itemsToAnimate:Vector.<Item>;
+		private var eatParticlesToAnimate:Vector.<Particle>;
+		
+		private var scoreText:TextField
+		
+		private var particle:PDParticleSystem;
 		
 		public function InGame()
 		{
@@ -53,12 +65,28 @@ package screens
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			drawGame();
+			
+			scoreText = new TextField(300, 100, "SCORE: 0", Assets.getFont().name, 24, 0xffffff);
+			scoreText.hAlign = HAlign.LEFT;
+			scoreText.vAlign = VAlign.TOP;
+			scoreText.x = 20;
+			scoreText.y = 20;
+			scoreText.height = scoreText.textBounds.height + 10;
+			this.addChild(scoreText);
 		}
 		
 		private function drawGame():void
 		{
 			bg = new GameBackground();
 			this.addChild(bg);
+			
+			particle = new PDParticleSystem(XML(new AssetsParticles.ParticleXML()), Texture.fromBitmap(new AssetsParticles.ParticleTexture()));
+			Starling.juggler.add(particle);
+			particle.x = -100;
+			particle.y = -100;
+			particle.scaleX = 1.2;
+			particle.scaleY = 1.2;
+			this.addChild(particle);
 			
 			hero = new Hero();
 			hero.x = stage.stageWidth/2;
@@ -98,6 +126,7 @@ package screens
 			
 			obstaclesToAnimate = new Vector.<Obstacle>();
 			itemsToAnimate = new Vector.<Item>();
+			eatParticlesToAnimate = new Vector.<Particle>();
 			
 			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
 		}
@@ -112,6 +141,7 @@ package screens
 		
 		private function launchHero():void
 		{
+			particle.start();
 			this.addEventListener(TouchEvent.TOUCH, onTouch);
 			this.addEventListener(Event.ENTER_FRAME, onGameTick);
 		}
@@ -126,6 +156,9 @@ package screens
 		
 		private function onGameTick(event:Event):void
 		{
+			particle.x = hero.x + 60;
+			particle.y = hero.y;
+			
 			switch(gameState)
 			{
 				case "idle":
@@ -176,17 +209,50 @@ package screens
 					
 					scoreDistance += (playerSpeed * elapsed) * 0.1;
 					
+					scoreText.text = "SCORE: " + scoreDistance;
+					
 					initObstacle();
 					animateObstacles();
 					
 					createFoodItems();
 					animateItems();
+					animateEatParticles();
 					
 					break;
 				case "over":
 					break;
 			}
 			
+		}
+		
+		private function animateEatParticles():void
+		{
+			for (var i:uint = 0;i<eatParticlesToAnimate.length;i++)
+			{
+				var eatParticleToTrack:Particle = eatParticlesToAnimate[i];
+				
+				if (eatParticleToTrack)
+				{
+					eatParticleToTrack.scaleX -= 0.03;
+					eatParticleToTrack.scaleY = eatParticleToTrack.scaleX;
+					
+					eatParticleToTrack.y -= eatParticleToTrack.speedY;
+					eatParticleToTrack.speedY -= eatParticleToTrack.speedY * 0.2;
+					
+					eatParticleToTrack.x += eatParticleToTrack.speedX;
+					eatParticleToTrack.speedX--;
+					
+					eatParticleToTrack.rotation += deg2rad(eatParticleToTrack.spin);
+					eatParticleToTrack.spin *= 1.1;
+					
+					if (eatParticleToTrack.scaleY <= 0.02)
+					{
+						eatParticlesToAnimate.splice(i, 1);
+						this.removeChild(eatParticleToTrack);
+						eatParticleToTrack = null;
+					}
+				}
+			}
 		}
 		
 		private function animateItems():void
@@ -201,6 +267,8 @@ package screens
 				
 				if (itemToTrack.bounds.intersects(hero.bounds))
 				{
+					createEatParticles(itemToTrack);
+					
 					itemsToAnimate.splice(i, 1);
 					this.removeChild(itemToTrack);
 				}
@@ -210,6 +278,30 @@ package screens
 					itemsToAnimate.splice(i, 1);
 					this.removeChild(itemToTrack);
 				}
+			}
+		}
+		
+		private function createEatParticles(itemToTrack:Item):void
+		{
+			var count:int = 5;
+			
+			while (count > 0)
+			{
+				count--;
+				
+				var eatParticle:Particle = new Particle();
+				this.addChild(eatParticle);
+				
+				eatParticle.x = itemToTrack.x + Math.random() * 40 - 20;
+				eatParticle.y = itemToTrack.y - Math.random() * 40;
+				
+				eatParticle.speedX = Math.random() * 2 + 1;
+				eatParticle.speedY = Math.random() * 5;
+				eatParticle.spin = Math.random() * 15;
+				
+				eatParticle.scaleX = eatParticle.scaleY = Math.random() * 0.3 + 0.3;
+				
+				eatParticlesToAnimate.push(eatParticle);
 			}
 		}
 		
