@@ -336,7 +336,7 @@ package screens
 		{
 			var obstacleToTrack:Obstacle;
 			
-			for (var i:uint = 0;i<obstaclesToAnimate.length;i++)
+			for (var i:uint = 0; i < obstaclesToAnimate.length; i++)
 			{
 				obstacleToTrack = obstaclesToAnimate[i];
 				

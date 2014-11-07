@@ -56,6 +56,7 @@ package screens
 			this.addChild(aboutBtn);
 			
 			this.addEventListener(Event.TRIGGERED, onMainMenuClick);
+			this.addEventListener(Event.TRIGGERED, onMainMenuClick2);
 		}
 		
 		private function onMainMenuClick(event:Event):void
@@ -64,6 +65,15 @@ package screens
 			if((event.target as Button) == playBtn)
 			{
 				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, {id: "play"}, true));
+			}
+		}
+		
+		private function onMainMenuClick2(event:Event):void
+		{
+			var buttonClicked:Button = event.target as Button;
+			if((event.target as Button) == aboutBtn)
+			{
+				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, {id: "about"}, true));
 			}
 		}
 		

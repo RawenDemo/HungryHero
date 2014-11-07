@@ -4,6 +4,7 @@ package
 	
 	import screens.InGame;
 	import screens.Welcome;
+	import screens.About;
 	
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -12,6 +13,7 @@ package
 	{
 		private var screenWelcome:Welcome;
 		private var screenInGame:InGame;
+		private var screenAbout:About;
 		
 		public function Game()
 		{
@@ -32,6 +34,10 @@ package
 			screenWelcome = new Welcome();
 			this.addChild(screenWelcome);
 			screenWelcome.initialize();
+			
+			screenAbout = new About();
+			screenAbout.disposeTemporarily();
+			this.addChild(screenAbout);
 		}
 		private function onChangeScreen(event:NavigationEvent):void
 		{
@@ -40,6 +46,16 @@ package
 				case "play":
 					screenWelcome.disposeTemporarily();
 					screenInGame.initialize();
+					break;
+
+				case "about":
+					screenWelcome.disposeTemporarily();
+					screenAbout.initialize();
+					break;
+
+				case "menu":
+					screenAbout.disposeTemporarily();
+					screenWelcome.initialize();
 					break;
 			}
 		}
